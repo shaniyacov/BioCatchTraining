@@ -1,5 +1,3 @@
-import json
-from collections import namedtuple
 from typing import List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,18 +34,18 @@ async def read_root():
 
 @app.post("/session", response_model=Session)
 async def add_session(session: Session):
-    response = await create_session(session.dict())
+    response = await create_session(session.model_dump())
     if response:
         return response
     raise HTTPException(400, "Something went wrong / Bad Request")
 
 
 @app.get("/session/{session_muid}", response_model=GetSessionModel)
-async def get_session(session_muid):
+async def get_sessions_by_id(session_muid: int):
     response = await fetch_one_session(session_muid)
     if response:
         return response
-    raise HTTPException(404, f"There is no session with the muid {session_muid}")
+    raise HTTPException(404, f"There is no todo item with muid: {session_muid}")
 
 
 @app.get("/sessions", response_model=List[GetSessionModel])
@@ -66,9 +64,9 @@ async def delete_sessions(session_muid: int):
     raise HTTPException(404, f"There is no todo item with muid: {session_muid}")
 
 
-@app.put("/session/{session}", response_model=Session)
-async def update_sessions(session):
-    response = await update_session(session)
+@app.put("/session/{session_muid}", response_model=Session)
+async def update_sessions(session_muid: int, session: Session):
+    response = await update_session(session_muid, session)
     if response:
         return response
     raise HTTPException(404, f"There is no todo item with muid: {session.muid}")

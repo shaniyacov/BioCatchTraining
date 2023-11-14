@@ -7,9 +7,12 @@ database = client.BioCatch
 collection = database.Sessions
 
 
-async def fetch_one_session(muid: int):
-    document = await collection.find_one({"muid": muid})
-    return document
+async def fetch_one_session(muid):
+    doc = await collection.find_one({"muid": muid})
+    doc['_id'] = str(doc['_id'])
+    doc['id'] = str(doc['_id'])
+    session_data = GetSessionModel(**doc)
+    return session_data
 
 
 async def fetch_all_sessions():
@@ -29,16 +32,18 @@ async def create_session(session: Session):
     return document
 
 
-async def update_session(session):
-    await collection.update_one({"_id": session._id}, {"$set": {
+async def update_session(muid: int, session: Session):
+    await collection.update_one({"muid": muid}, {"$set": {
         "device_type": session.device_type,
         "transfer_usd": session.transfer_usd,
         "fraud": session.fraud
     }})
-    document = await collection.find_one({"muid": session.muid})
+    document = await collection.find_one({"muid": muid})
     return document
 
 
 async def delete_session(muid):
+    doc = await collection.find_one({"muid": muid})
+    print(doc)
     await collection.delete_one({"muid": muid})
     return True

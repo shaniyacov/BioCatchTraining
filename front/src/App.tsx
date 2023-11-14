@@ -38,7 +38,7 @@ function App() {
         <>
             <Header/>
             <div className={"app-main"}>
-                <SessionsTable data={sessions} openAddSession={() => setCreateSessionOpen(true)} openDeleteSession={() => setDeleteSessionOpen(true)}> </SessionsTable>
+                <SessionsTable data={sessions} openAddSession={() => setCreateSessionOpen(true)} openDeleteSession={() => setDeleteSessionOpen(true)}/>
             </div>
             <CreateSession isOpen={isCreateSessionOpen} onRequestClose={() => setCreateSessionOpen(false)} />
             <DeleteSession isOpen={isDeleteSessionOpen} onRequestClose={() => setDeleteSessionOpen(false)} sessionMuid={0}/>
