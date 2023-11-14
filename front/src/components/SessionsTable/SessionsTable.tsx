@@ -12,7 +12,7 @@ const columns: GridColDef[] = [
 ];
 
 interface TableProps {
-    data: [];
+    data: any;
     openAddSession: () => void;
     openDeleteSession: () => void;
 }
