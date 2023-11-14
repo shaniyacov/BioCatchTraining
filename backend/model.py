@@ -1,12 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Session(BaseModel):
-    muid: int
+    muid: str
     device_type: str
     transfer_usd: int
     fraud: bool
 
 
 class GetSessionModel(Session):
-    id: str
+    id: str = Field(..., alias="_id")

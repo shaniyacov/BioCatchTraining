@@ -3,7 +3,6 @@ import {FC} from 'react';
 import Modal from 'react-modal';
 import axios from "axios";
 import {baseURL} from "../../App.tsx";
-import "./DeleteSession.css"
 
 Modal.setAppElement('#root');
 
@@ -14,7 +13,7 @@ interface PopupProps {
 }
 
 
-const DeleteSession: FC<PopupProps> = ({isOpen, onRequestClose, sessionMuid}) => {
+const UpdateSession: FC<PopupProps> = ({isOpen, onRequestClose, sessionMuid}) => {
     const onSubmit: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
 
@@ -23,7 +22,7 @@ const DeleteSession: FC<PopupProps> = ({isOpen, onRequestClose, sessionMuid}) =>
         }, (error) => {
             console.log(error);
         });
-        onRequestClose();
+        onRequestClose()
     }
 
 
@@ -31,11 +30,11 @@ const DeleteSession: FC<PopupProps> = ({isOpen, onRequestClose, sessionMuid}) =>
         <Modal isOpen={isOpen} contentLabel="Add Session">
             <div> Are you sure you want to delete the session?</div>
             <div className={"formDiv"}>
-                <button type="submit" value="Delete and close window" onClick={onSubmit}>Delete and close window</button>
+                <button type="submit" value="Delete and close window" onClick={onSubmit}>Add and close window</button>
                 <button onClick={onRequestClose}>Cancel</button>
             </div>
         </Modal>
     );
 };
 
-export default DeleteSession;
+export default UpdateSession;

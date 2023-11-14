@@ -41,7 +41,7 @@ async def add_session(session: Session):
 
 
 @app.get("/session/{session_muid}", response_model=GetSessionModel)
-async def get_sessions_by_id(session_muid: int):
+async def get_sessions_by_id(session_muid: str):
     response = await fetch_one_session(session_muid)
     if response:
         return response
@@ -57,7 +57,7 @@ async def get_sessions():
 
 
 @app.delete("/session/{session_muid}")
-async def delete_sessions(session_muid: int):
+async def delete_sessions(session_muid: str):
     response = await delete_session(session_muid)
     if response:
         return "Successfully deleted todo"
@@ -65,7 +65,7 @@ async def delete_sessions(session_muid: int):
 
 
 @app.put("/session/{session_muid}", response_model=Session)
-async def update_sessions(session_muid: int, session: Session):
+async def update_sessions(session_muid: str, session: Session):
     response = await update_session(session_muid, session)
     if response:
         return response
