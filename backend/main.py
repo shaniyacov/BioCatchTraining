@@ -8,7 +8,7 @@ from database import (
     fetch_all_sessions,
     create_session,
     delete_session,
-    update_session
+    update_session, get_existing_object
 )
 
 app = FastAPI()
@@ -34,7 +34,10 @@ async def read_root():
 
 @app.post("/session", response_model=Session)
 async def add_session(session: Session):
-    response = await create_session(session.model_dump())
+    doc = await get_existing_object(session.muid)
+    if doc:
+        raise HTTPException(403, "A session with this muid already exists")
+    response = await create_session(session)
     if response:
         return response
     raise HTTPException(400, "Something went wrong / Bad Request")

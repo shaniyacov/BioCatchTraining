@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 class Session(BaseModel):
     muid: str
     device_type: str
-    transfer_usd: int
+    transfer_usd: float
     fraud: bool
 
 

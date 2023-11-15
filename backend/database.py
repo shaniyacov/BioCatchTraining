@@ -7,18 +7,23 @@ database = client.BioCatch
 collection = database.Sessions
 
 
-async def fetch_one_session(muid):
+async def get_existing_object(muid):
     doc = await collection.find_one({"muid": muid})
-    doc['_id'] = str(doc['_id'])
-    session_data = GetSessionModel(**doc)
-    return session_data
+    return doc
+
+
+async def fetch_one_session(muid):
+    doc = get_existing_object(muid)
+    if doc:
+        doc['_id'] = str(doc['_id'])
+        session_data = GetSessionModel(**doc)
+        return session_data
 
 
 async def fetch_all_sessions():
     sessions = []
     cursor = collection.find({})
     async for document in cursor:
-        print(document)
         document['_id'] = str(document['_id'])
         session_data = GetSessionModel(**document)
         sessions.append(session_data)
@@ -26,7 +31,7 @@ async def fetch_all_sessions():
 
 
 async def create_session(session: Session):
-    document = session
+    document = vars(session)
     result = await collection.insert_one(document)
     return document
 
