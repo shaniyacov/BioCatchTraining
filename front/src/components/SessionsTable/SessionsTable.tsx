@@ -4,6 +4,7 @@ import {useState} from "react";
 import './SessionsTable.css'
 import CreateSession from "../CreateSession/CreateSession.tsx";
 import DeleteSession from "../DeleteSession/DeleteSession.tsx";
+import UpdateSession from "../UpdateSession/UpdateSession.tsx";
 
 
 const columns: GridColDef[] = [
@@ -20,16 +21,15 @@ interface TableProps {
 
 
 const SessionsTable: FC<TableProps> = ({data, refreshData}) => {
-    const [rowsSelected, setRowsSelected] = useState(false);
     const [isCreateSessionOpen, setCreateSessionOpen] = useState<boolean>(false);
     const [isDeleteSessionOpen, setDeleteSessionOpen] = useState<boolean>(false);
+    const [isUpdateSessionOpen, setUpdateSessionOpen] = useState<boolean>(false);
+    const [selectionMuid, setSelectionMuid] = React.useState("");
 
-    function getOnRowSelectionModelChange() {
-        setRowsSelected(!rowsSelected);
-    }
 
-    function getRowId(row: any) {
-        return row._id;
+    function onUpdateSessionClose() {
+        refreshData();
+        setUpdateSessionOpen(false);
     }
 
     function onDeleteSessionClose() {
@@ -42,28 +42,44 @@ const SessionsTable: FC<TableProps> = ({data, refreshData}) => {
         setCreateSessionOpen(false);
     }
 
+    function getOnRowSelectionModelChange(newSelection: any) {
+        const selectedRowId = newSelection[0];
+        const found = data.find((row: any) => row._id == selectedRowId);
+        if (found) {
+            setSelectionMuid(found.muid);
+        }
+    }
+
     return (
         <div className="table">
             <DataGrid
                 rows={data}
                 columns={columns}
+                getRowId={(row) => row._id}
                 onRowSelectionModelChange={getOnRowSelectionModelChange}
-                getRowId={getRowId}
             />
             <div className={"bottomButtons"}>
                 <div className={"sessionsButton"}>
                     <button onClick={() => setCreateSessionOpen(true)}>Add Session</button>
                 </div>
-                {rowsSelected && (
+                {selectionMuid != "" && (
                     <div className={"sessionsButton"}>
                         <button onClick={() => setDeleteSessionOpen(true)}>Delete Session
+                        </button>
+                    </div>
+                )}
+                {selectionMuid != "" && (
+                    <div className={"sessionsButton"}>
+                        <button onClick={() => setUpdateSessionOpen(true)}>Update Session
                         </button>
                     </div>
                 )}
             </div>
             <CreateSession isOpen={isCreateSessionOpen} onRequestClose={onCreateSessionClose}/>
             <DeleteSession isOpen={isDeleteSessionOpen} onRequestClose={onDeleteSessionClose}
-                           sessionMuid={""}/>
+                           sessionMuid={selectionMuid}/>
+            <UpdateSession isOpen={isUpdateSessionOpen} onRequestClose={onUpdateSessionClose}
+                           sessionMuid={selectionMuid}/>
         </div>
     );
 }
