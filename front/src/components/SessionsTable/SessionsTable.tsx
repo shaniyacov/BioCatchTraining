@@ -62,8 +62,7 @@ const SessionsTable: FC<TableProps> = ({data, refreshData}) => {
                 </div>
                 {selectionSession && (
                     <div className={"sessionsButton"}>
-                        <button onClick={() => setEditSessionOpen(true)}>Update Session
-                        </button>
+                        <button onClick={() => setEditSessionOpen(true)}>Edit Session</button>
                     </div>
                 )}
             </div>
