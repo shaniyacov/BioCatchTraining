@@ -1,4 +1,4 @@
-.addSessionForm {
+.updateSessionForm {
     padding: 180px;
 }
 
@@ -6,4 +6,8 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
+}
+
+.muidInput {
+    width: 300px;
 }

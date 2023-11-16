@@ -3,7 +3,7 @@ import { useState } from 'react'
 import "./Toggle.css"
 
 interface ToggleProps {
-    toggled: boolean;
+    toggled: boolean | undefined;
     onClick: (isToggled: boolean) => void;
 }
 

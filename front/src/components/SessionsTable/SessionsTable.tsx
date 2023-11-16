@@ -2,9 +2,9 @@ import React, {FC} from "react";
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import {useState} from "react";
 import './SessionsTable.css'
-import CreateSession from "../CreateSession/CreateSession.tsx";
-import DeleteSession from "../DeleteSession/DeleteSession.tsx";
-import UpdateSession from "../UpdateSession/UpdateSession.tsx";
+import CreateSession from "../SessionForm/CreateSession/CreateSession.tsx";
+import EditSession from "../SessionForm/UpdateSession/EditSession.tsx";
+import {FormDataType} from "../SessionForm/SessionForm.tsx";
 
 
 const columns: GridColDef[] = [
@@ -22,31 +22,28 @@ interface TableProps {
 
 const SessionsTable: FC<TableProps> = ({data, refreshData}) => {
     const [isCreateSessionOpen, setCreateSessionOpen] = useState<boolean>(false);
-    const [isDeleteSessionOpen, setDeleteSessionOpen] = useState<boolean>(false);
-    const [isUpdateSessionOpen, setUpdateSessionOpen] = useState<boolean>(false);
-    const [selectionMuid, setSelectionMuid] = React.useState("");
+    const [isEditSessionOpen, setEditSessionOpen] = useState<boolean>(false);
+    const [selectionSession, setSelectionSession] = useState<FormDataType>();
 
 
     function onUpdateSessionClose() {
         refreshData();
-        setUpdateSessionOpen(false);
-    }
-
-    function onDeleteSessionClose() {
-        refreshData();
-        setDeleteSessionOpen(false);
+        setEditSessionOpen(false);
+        setSelectionSession(undefined);
     }
 
     function onCreateSessionClose() {
         refreshData();
         setCreateSessionOpen(false);
+        setSelectionSession(undefined);
     }
 
     function getOnRowSelectionModelChange(newSelection: any) {
         const selectedRowId = newSelection[0];
         const found = data.find((row: any) => row._id == selectedRowId);
         if (found) {
-            setSelectionMuid(found.muid);
+            const selectedSession = new FormDataType(found.muid, found.device_type, found.transfer_usd, found.fraud);
+            setSelectionSession(selectedSession);
         }
     }
 
@@ -57,29 +54,25 @@ const SessionsTable: FC<TableProps> = ({data, refreshData}) => {
                 columns={columns}
                 getRowId={(row) => row._id}
                 onRowSelectionModelChange={getOnRowSelectionModelChange}
+                autoHeight
             />
             <div className={"bottomButtons"}>
                 <div className={"sessionsButton"}>
                     <button onClick={() => setCreateSessionOpen(true)}>Add Session</button>
                 </div>
-                {selectionMuid != "" && (
+                {selectionSession && (
                     <div className={"sessionsButton"}>
-                        <button onClick={() => setDeleteSessionOpen(true)}>Delete Session
-                        </button>
-                    </div>
-                )}
-                {selectionMuid != "" && (
-                    <div className={"sessionsButton"}>
-                        <button onClick={() => setUpdateSessionOpen(true)}>Update Session
+                        <button onClick={() => setEditSessionOpen(true)}>Update Session
                         </button>
                     </div>
                 )}
             </div>
             <CreateSession isOpen={isCreateSessionOpen} onRequestClose={onCreateSessionClose}/>
-            <DeleteSession isOpen={isDeleteSessionOpen} onRequestClose={onDeleteSessionClose}
-                           sessionMuid={selectionMuid}/>
-            <UpdateSession isOpen={isUpdateSessionOpen} onRequestClose={onUpdateSessionClose}
-                           sessionMuid={selectionMuid}/>
+            {selectionSession && (
+                <EditSession isOpen={isEditSessionOpen} onRequestClose={onUpdateSessionClose}
+                             selectedSession={selectionSession}/>
+            )}
+
         </div>
     );
 }

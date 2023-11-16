@@ -16,7 +16,6 @@ export function getSessions(): () => void {
     return () => {
         axios.get('http://localhost:8000/sessions')
             .then(res => {
-                debugger;
                 return res.data;
             })
     }

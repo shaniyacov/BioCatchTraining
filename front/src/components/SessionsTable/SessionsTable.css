@@ -37,6 +37,10 @@
   text-align: left;
 }
 
+.datagrid {
+  min-height: 300px;
+}
+
 .delete {
   position: absolute;
 }
