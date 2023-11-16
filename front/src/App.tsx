@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 import Header from "./components/Header/Header";
 import SessionsTable from "./components/SessionsTable/SessionsTable";
@@ -17,11 +17,10 @@ function App() {
         });
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchSessions();
-    }, []);  // <-- Fetch data on mount
+    }, []);
 
-    // Use this function to manually refresh the data
     const refreshData = () => {
         fetchSessions();
     };
