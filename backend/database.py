@@ -1,6 +1,9 @@
+from uuid import UUID
+
 from model import GetSessionModel, Session
 import motor.motor_asyncio
-from bson import ObjectId
+from bson import ObjectId, Binary
+
 
 client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017/')
 
@@ -8,8 +11,13 @@ database = client.BioCatch
 collection = database.Sessions
 
 
+def get_uuid(muid):
+    received_uuid = UUID(muid)
+    return Binary(received_uuid.bytes, 4)
+
+
 async def get_existing_object(muid):
-    document = await collection.find_one({"muid": muid})
+    document = await collection.find_one({"muid": get_uuid(muid)})
     if document:
         document['_id'] = str(document['_id'])
         return document
@@ -34,6 +42,7 @@ async def create_session(session: Session):
     document = vars(session)
     document['deleted'] = False
     document['device_type'] = session.device_type.value
+    document['muid'] = Binary.from_uuid(session.muid)
     result = await collection.insert_one(document)
     return document
 
@@ -41,17 +50,17 @@ async def create_session(session: Session):
 async def update_session(_id: str, session: Session):
     object_id = ObjectId(_id)
     result = await collection.update_one({"_id": object_id}, {"$set": {
-        "muid": session.muid,
-        "device_type": session.device_type,
+        "muid": Binary.from_uuid(session.muid),
+        "device_type": session.device_type.value,
         "transfer_usd": session.transfer_usd,
         "fraud": session.fraud
     }})
     return result.modified_count > 0
 
 
-async def delete_session(muid):
-    await collection.update_one({"muid": muid}, {"$set": {
+async def delete_session(muid: str):
+    result = await collection.update_one({"muid": get_uuid(muid)}, {"$set": {
         "deleted": True
     }})
-    return True
+    return result.modified_count > 0
 

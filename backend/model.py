@@ -1,3 +1,5 @@
+import uuid
+
 from pydantic import BaseModel, Field
 from enum import Enum
 
@@ -9,7 +11,7 @@ class DeviceTypeEnum(Enum):
 
 
 class Session(BaseModel):
-    muid: str
+    muid: uuid.UUID
     device_type: DeviceTypeEnum
     transfer_usd: float
     fraud: bool
