@@ -68,7 +68,7 @@ const EditSession: FC<PopupProps> = ({isOpen, onRequestClose, selectedSession}) 
                             onChange={(e) => setDeviceType(e.target.value)}>
                         <option value=""></option>
                         <option value="pc">pc</option>
-                        <option value="andriod">android</option>
+                        <option value="android">android</option>
                         <option value="ios">ios</option>
                     </select>
                 </div>

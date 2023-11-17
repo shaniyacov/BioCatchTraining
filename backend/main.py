@@ -1,4 +1,6 @@
 from typing import List
+from uuid import UUID
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -37,6 +39,7 @@ async def add_session(session: Session):
     if document:
         if is_deleted(document):
             raise HTTPException(403, "This session has already been deleted")
+        raise HTTPException(403, "A session with this muid already exists")
     response = await create_session(session)
     if response:
         return response
@@ -61,11 +64,12 @@ async def get_sessions():
 
 @app.delete("/session/{session_muid}")
 async def delete_sessions(session_muid: str):
-    document = await get_existing_object(session_muid)
+    received_muid = UUID(session_muid)
+    document = await get_existing_object(received_muid)
     if document:
         if is_deleted(document):
             raise HTTPException(403, "This session has already been deleted")
-        response = await delete_session(session_muid)
+        response = await delete_session(received_muid)
         if response:
             return "Successfully deleted session"
     raise HTTPException(404, f"There is no session item with muid: {session_muid}")
@@ -73,7 +77,8 @@ async def delete_sessions(session_muid: str):
 
 @app.put("/session/{session_muid}")
 async def update_sessions(session_muid: str, session: Session):
-    document = await get_existing_object(session_muid)
+    received_muid = UUID(session_muid)
+    document = await get_existing_object(received_muid)
     if document:
         if is_deleted(document):
             raise HTTPException(403, "This session has already been deleted")

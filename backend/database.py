@@ -12,8 +12,7 @@ collection = database.Sessions
 
 
 def get_uuid(muid):
-    received_uuid = UUID(muid)
-    return Binary(received_uuid.bytes, 4)
+    return Binary(muid.bytes, 4)
 
 
 async def get_existing_object(muid):
@@ -58,7 +57,7 @@ async def update_session(_id: str, session: Session):
     return result.modified_count > 0
 
 
-async def delete_session(muid: str):
+async def delete_session(muid):
     result = await collection.update_one({"muid": get_uuid(muid)}, {"$set": {
         "deleted": True
     }})
