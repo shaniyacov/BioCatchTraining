@@ -1,9 +1,6 @@
-from uuid import UUID
-
 from model import GetSessionModel, Session
 import motor.motor_asyncio
 from bson import ObjectId, Binary
-
 
 client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017/')
 
@@ -62,4 +59,3 @@ async def delete_session(muid):
         "deleted": True
     }})
     return result.modified_count > 0
-

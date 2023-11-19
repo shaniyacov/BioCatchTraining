@@ -3,7 +3,7 @@ import {FC} from 'react';
 import Modal from 'react-modal';
 import axios from "axios";
 import {baseURL} from "../../../App.tsx";
-import {createRequestBody, FormDataType} from "../SessionForm.tsx";
+import {createRequestBody, FormDataType} from "../SessionFormUtils.tsx";
 import {Toggle} from "../Toggle/Toggle.tsx";
 import {validateData} from "../SessionFormValidation.tsx";
 import "./CreateSession.css"

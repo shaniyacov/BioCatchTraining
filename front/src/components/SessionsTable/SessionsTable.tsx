@@ -4,7 +4,7 @@ import {useState} from "react";
 import './SessionsTable.css'
 import CreateSession from "../SessionForm/CreateSession/CreateSession.tsx";
 import EditSession from "../SessionForm/UpdateSession/EditSession.tsx";
-import {FormDataType} from "../SessionForm/SessionForm.tsx";
+import {FormDataType} from "../SessionForm/SessionFormUtils.tsx";
 
 
 const columns: GridColDef[] = [

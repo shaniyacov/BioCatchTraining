@@ -6,7 +6,7 @@ Modal.setAppElement('#root');
 export class FormDataType {
     muid: string | undefined;
     device_type: string | undefined;
-    transfer_usd: number  | undefined;
+    transfer_usd: number | undefined;
     fraud: boolean | undefined;
 
     constructor(muid: string, device_type: string, transfer_usd: number, fraud: boolean) {
