@@ -28,11 +28,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
-
-
 @app.post("/session", response_model=Session)
 async def add_session(session: Session):
     document = await get_existing_object(session.muid)
