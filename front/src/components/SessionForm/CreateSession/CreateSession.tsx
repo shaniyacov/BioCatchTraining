@@ -70,7 +70,8 @@ const CreateSession: FC<PopupProps> = ({isOpen, onRequestClose}) => {
                     <label> transfer_usd: </label>
                     <input id="transfer_usd" onChange={(e) => setTransferUsd(e.target.valueAsNumber)}
                            type="number"
-                           step={"0.1"}/>
+                           step={"0.1"}
+                           min={0}/>
                 </div>
                 <div className={"formDiv"}>
                     <label> is fraud: </label>
